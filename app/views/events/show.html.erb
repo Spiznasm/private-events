@@ -1,0 +1,24 @@
+<h1><%= @event.name %></h1>
+
+<h3>Where: <%= @event.location %></h3>
+<h3>When: <%= @event.date.strftime("%_m/%e/%y at %l:%M %P") %></h3>
+<h3>Whats Happening: <%= @event.description %></h3>
+
+<section class="invite">
+<% if @event.host_id == current_user.id %>
+  <%= link_to "Edit", edit_event_path(@event) %>
+<% else %>
+  <% if @event.date < DateTime.now %>
+  	<p>This event is over</p>
+  <% elsif @event.attendees.include?(current_user) %>
+  	<%= form_for(:invite, url: invite_path, html: { method: :delete }) do |f| %>
+  	<%= f.submit "Leave event" %>
+  	<% end %>
+  <% else %>
+  	<%= form_for(:invite, url: invites_path) do |f| %>
+  	<%= f.hidden_field :event_id, value: @event.id %>
+  	<%= f.submit 'Attend event' %>
+    <% end %>
+  <% end %>
+<% end %>
+</section>

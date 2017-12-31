@@ -1,0 +1,8 @@
+<h1>All Events</h1>
+
+<section>
+<%= button_to "Create New Event", new_event_path %>
+<% Event.all.each do |event| %>
+<%= link_to event.name.to_s, event_path(event) %><br>
+<% end %>
+</section>
